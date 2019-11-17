@@ -26,7 +26,7 @@ def cleantext(text):
     newString = ' '.join(re.sub(r'((RT)*( )*\@[a-zA-Z0-9ğüşöçİĞÜŞÖÇ_]*:?)(?!;)', '', text).split()) # cleans RT
     newString = ' '.join(re.sub(r'(\#[A-Za-z0-9ğüşöçİĞÜŞÖÇ]*)(?!;)', '', newString).split()) # cleans Hashtags
     newString = remove_emoji(newString) # cleans Emoji
-    newString = ' '.join(re.sub(r'(https:\/\/[a-zA-Z0-9.\/]*\b)', '', newString).split()) # cleans mention
+    newString = ' '.join(re.sub(r'(https:\/\/[a-zA-Z0-9.\/]*\b)', '', newString).split()) # cleans links
     return newString
 
 
