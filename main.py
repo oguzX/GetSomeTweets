@@ -54,8 +54,8 @@ while (counter<TWEET_COUNT):
     public_tweets = api.search(q='edirne', tweet_mode='extended', count=TWEET_COUNT, max_id = LATEST_ID)
     for tweetIndex in range(len(public_tweets)):
         cleantext(public_tweets[tweetIndex])
+    tag.twitArray(('tem istoç'))
     for tweet in unRepeatedList:
         print(tweet)
         tag.twitArray(tweet)
-#
-# tag.twitArray('recep tayyip erdoğan blabalba nabtin i̇stanbul')
+
