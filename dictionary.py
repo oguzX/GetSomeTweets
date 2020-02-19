@@ -1,35 +1,13 @@
 # dict = ['Trakya']
 
 
-dictionary = {
-    'Organization':{
-        'tag':'Organization',
-        'words':[
-            'edirne belediye başkanlığı',
-            'disk trakya bölge temsilciliği',
-            'bahçeşehir koleji bilim ve teknoloji lisesi',
-            'denizlispor',
-            'fenerbahçe',
-            'osmanlı devleti',
-            'galatasaray',
-            'ak parti edirne il gençlik kolları başkanlığı',
-            'kadın emek pazarı',
-            'okul aile birliği',
-            'keşan satranç şenliği',
-            'kadın kolektifi',
-            'fetö',
-            'kariyer ve marka etkinliği trakya plus',
-            'trakya tarımsal araştırma enstitüsü',
-            'chp',
-            'edirne yağ',
-            'kalkınma ajansı'
-        ]
-    },
-    'Location':{
+dictionary = {'Location':{
         'tag':'Location',
         'words':[
             'edirne',
+            'eski edirne asfaltı',
             'selimiye camii',
+            'bolluca sapağı',
             'aydın',
             'mersin',
             'merkez',
@@ -37,11 +15,13 @@ dictionary = {
             'ankara',
             'bolu',
             'kars',
+            'arnavutköy',
             'muğla',
             'izmir',
             'hatay',
             'gümüşhane',
             'trabzon',
+            'türkiye',
             'kırklareli',
             'çerkezköy',
             'trakya',
@@ -70,6 +50,34 @@ dictionary = {
             'trakya üniversitesi eğitim fakültesi ',
             'd100',
             'tem istoç'
+        ]
+    },
+    'Organization':{
+        'tag':'Organization',
+        'words':[
+            'edirne belediye başkanlığı',
+            'disk trakya bölge temsilciliği',
+            'bahçeşehir koleji bilim ve teknoloji lisesi',
+            'denizlispor',
+            'fenerbahçe',
+            'osmanlı devleti',
+            'galatasaray',
+            'ak parti edirne il gençlik kolları başkanlığı',
+            'kadın emek pazarı',
+            'okul aile birliği',
+            'keşan satranç şenliği',
+            'türk ocakları',
+            'otobüsçüler kooperatifi',
+            'kadın kolektifi',
+            'iyi parti',
+            'türkiye gençlik vakfı ',
+            'milli eğitim ',
+            'fetö',
+            'kariyer ve marka etkinliği trakya plus',
+            'trakya tarımsal araştırma enstitüsü',
+            'chp',
+            'edirne yağ',
+            'kalkınma ajansı'
         ]
     },
     'Gender':{
@@ -146,7 +154,7 @@ dictionary = {
             },
             'Sn':{
                 'get':'after',
-                'length':1
+                'length':2
             },
         }
     }

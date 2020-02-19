@@ -1,17 +1,21 @@
-import dictionary, re
+from collections import defaultdict
+
+import dictionary, re,\
+    classes.Isim as Isim
 
 lastType = ''
 lastIndex = ''
 
 
-def printTag(index, words):
-    point = 0
-    char = 'B'
-    for word in words:
-        print('{' + char + '-' + dictionary.dictionary[index]['tag'] + '}' + word)
-        if point == 0:
-            point = 1
-            char = 'I'
+def printTag(isimler):
+    for isim in isimler:
+        point = 0
+        char = 'B'
+        for word in isim.isim:
+            print('{' + char + '-' + dictionary.dictionary[isim.type]['tag'] + '}' + word)
+            if point == 0:
+                point = 1
+                char = 'I'
 
 
 def cleanName(oldName):
@@ -27,75 +31,71 @@ def getMaxLengthSentence(sentence):
             return sentence[i]
     return sentence[0]
 
+def grupla(isimler):
+    res = defaultdict(list)
+    for isim in isimler:
+        res[isim.baslangicIndex].append(isim)
+    return res
+
+def yuksekPunalilariGetir(bulunanIsimler):
+    bulunanIsimler = grupla(bulunanIsimler)
+    res = []
+    for isimler in bulunanIsimler.items():
+        for isim in isimler[1:]:
+            res.append(max(isim, key=lambda x:x.puan))
+    return res
+
 
 def searchInSubDict(name, searchThing):
-    global lastType
-    global lastIndex
+    isimler = []
+    searchThingLength = len(searchThing)
+    for i in range(0, searchThingLength):
+        baslangicIndex = i
+        bulunanIsimler = []
+        for j in range(len(dictionary.dictionary[name]['words'])):
+            kutuphaneIsmi = dictionary.dictionary[name]['words'][j].split()
+            if kutuphaneIsmi[0] == cleanName(searchThing[i]):
 
-    sentence = {}
-    indexCounter = 0
-    sentence[indexCounter] = {}
-    sentence[indexCounter]['length'] = 0
-    sentence[indexCounter]['words'] = []
-    sentence['allLength'] = [0]
-    for i in range(len(dictionary.dictionary[name]['words'])):
-        splitedDictWord = dictionary.dictionary[name]['words'][i].split(' ')
-        found = 0
-        for j in range(0, len(searchThing)):
-            # try:
-            #     rulesKeys = dictionary.dictionary['rules'].keys()
-            #     index = list(rulesKeys).index(cleanName(searchThing[j]))
-            #
-            # except ValueError:
-            #     print()
-            if (cleanName(searchThing[j]) in splitedDictWord and cleanName(searchThing[j]) not in
-                    dictionary.dictionary['banned']['words']):
-                found = 1
-                try:
-                    sentence[indexCounter]['length'] = sentence[indexCounter]['length'] + 1
-                    sentence[indexCounter]['words'].append(searchThing[j])
-                except KeyError:  # this is a new word
-                    sentence[indexCounter] = {}
-                    sentence[indexCounter]['length'] = 1
-                    sentence[indexCounter]['words'] = []
-                    sentence[indexCounter]['words'].append(searchThing[j])
-        if (found == 1):
-            sentence['allLength'].append(sentence[indexCounter]['length'])
-            indexCounter += 1
-            found = 0
+                kelimeBasladi = 0
+                sonIsim = ''
+                for k in range(min(len(kutuphaneIsmi),searchThingLength)):
+                    try:
+                        if kutuphaneIsmi[k] == cleanName(searchThing[i + k]):
+                            if kelimeBasladi == 0:
+                                yeniIsim = Isim.Isim(kutuphaneIsmi[k], name, baslangicIndex)
+                                sonIsim = yeniIsim
+                                kelimeBasladi = 1
+                            else:
+                                sonIsim.isimeEkle(kutuphaneIsmi[k])
+                            # if(i+1<=(searchThingLength-1)):
+                            #     i+=1
+                        else:
+                            if kelimeBasladi == 1:
+                                bulunanIsimler.append(sonIsim)
+                                kelimeBasladi = 0
+                    except IndexError:
+                        ''
+                if sonIsim != '':
+                    bulunanIsimler.append(sonIsim)
+        if(bulunanIsimler):
+            isimler.extend(yuksekPunalilariGetir(bulunanIsimler))
+    return  isimler
 
-    return getMaxLengthSentence(sentence)
-
-
-def findInDictionary(twitWord, afterWord=[]):
-    global lastType, lastIndex
-    response = 0
-    sentences1 = searchInSubDict('SpecialName', twitWord)
-    sentences2 = searchInSubDict('Organization', twitWord)
-    sentences3 = searchInSubDict('Location', twitWord)
-    sentences4 = searchInSubDict('Date', twitWord)
-    sentences5 = searchInSubDict('Gender', twitWord)
-
-    longestSentence = max(sentences1['length'], sentences2['length'], sentences3['length'], sentences4['length'],
-                          sentences5['length'])
-    if sentences1['length'] == longestSentence:
-        printTag('SpecialName', sentences1['words'])
-    if sentences2['length'] == longestSentence:
-        printTag('Organization', sentences2['words'])
-    if sentences3['length'] == longestSentence:
-        printTag('Location', sentences3['words'])
-    if sentences4['length'] == longestSentence:
-        printTag('Date', sentences4['words'])
-    if sentences5['length'] == longestSentence:
-        printTag('Gender', sentences5['words'])
-    if response == 0:
-        lastIndex = -1
-        lastType = ''
+def findInDictionary(twitWord):
+    tumBulunanlar = []
+    tumBulunanlar.extend(searchInSubDict('SpecialName', twitWord))
+    tumBulunanlar.extend(searchInSubDict('Organization', twitWord))
+    tumBulunanlar.extend(searchInSubDict('Location', twitWord))
+    tumBulunanlar.extend(searchInSubDict('Date', twitWord))
+    tumBulunanlar.extend(searchInSubDict('Gender', twitWord))
+    sonuc = yuksekPunalilariGetir(tumBulunanlar)
+    return  sonuc
 
 
 def twitArray(twit):
     twitArr = twit.split(' ')
     global lastType
     lastType = ''
-    findInDictionary(twitArr)
+    sonuc = findInDictionary(twitArr)
+    printTag(sonuc)
     print('-----')
