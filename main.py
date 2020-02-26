@@ -46,18 +46,27 @@ def cleantext(resultObject):
     newString = ' '.join(re.sub(r'(\#[A-Za-z0-9ğüşöçİĞÜŞÖÇ]*)(?!;)', '', resultObject.full_text).split())  # cleans Hashtags
     newString = ' '.join(re.sub(r'((RT)*( )*\@[a-zA-Z0-9ğüşöçİĞÜŞÖÇ_]*:?)(?!;)', '', newString).split())  # cleans RT
     newString = remove_emoji(newString)  # cleans Emoji
+    newString = newString.replace(',','')
+    newString = newString.replace('.','')
+    newString = newString.replace('-',' ')
+    newString = newString.replace('...','')
+    newString = newString.replace('\'',' ')
     newString = ' '.join(re.sub(r'(https:\/\/[a-zA-Z0-9.\/]*\b)', '', newString).split())  # cleans links
     cleanDuplicatedTweets(resultObject, unRepeatedList, newString)
 
 counter = 0
 while (counter<TWEET_COUNT):
     public_tweets = api.search(q='edirne', tweet_mode='extended', count=TWEET_COUNT, max_id = LATEST_ID)
-    # tag.twitArray('Eski Edirne Asfaltı Bolluca sapağı')
+    # tag.twitArray(' Sn. Selim Ak ı ziyaret ettik. Misafirperverliklerinden dolayı…')
+    # tag.twitArray('Sn Şeref Tütüncü ile birlikte Sn.Pakize Uz, Sn Birsen Özgür ve Sn Soner Polat Gazi m…')
     # tag.twitArray('Eski Edirne Asfaltı Bolluca sapağı sonrası Arnavutköy yönünde yaralanmalı kaza! Ayrıntılar 104.2 Radyo Trafik')
     for tweetIndex in range(len(public_tweets)):
         cleantext(public_tweets[tweetIndex])
-    # tag.twitArray(('tem istoç'))
     for tweet in unRepeatedList:
         print(tweet)
         tag.twitArray(tweet)
+        counter += 1
+
+print('Tweet Count = '+ str(counter))
+
 

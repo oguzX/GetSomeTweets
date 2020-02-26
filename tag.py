@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+
 import dictionary, re,\
     classes.Isim as Isim
 
@@ -46,6 +47,37 @@ def yuksekPunalilariGetir(bulunanIsimler):
     return res
 
 
+def checkForRules(searchThing):
+    isimler = []
+    searchThingLength = len(searchThing)
+    for i in range(0, searchThingLength):
+        bulunanisimler = []
+        for rules in dictionary.dictionary['Rules']['words'].keys():
+            if searchThing[i].lower() == rules:
+                rule = dictionary.dictionary['Rules']['words'][rules]
+                indexes = {'start':i,'end':i}
+                if rule['get'] == 'after':
+                    indexes['start'] += 1
+                    indexes['end'] += rule['length']+1
+                else:
+                    indexes['start'] -= rule['length']
+                    indexes['end'] -= 1
+                kelimeBasladi = 0
+                sonIsim = ''
+                for searchThingWord in searchThing[indexes['start']:indexes['end']]:
+                    if kelimeBasladi == 0:
+                        yeniIsim = Isim.Isim(searchThingWord, rule['type'], i)
+                        sonIsim = yeniIsim
+                        kelimeBasladi = 1
+                    else:
+                        sonIsim.isimeEkle(searchThingWord)
+                if sonIsim:
+                    bulunanisimler.append(sonIsim)
+        if(bulunanisimler):
+            isimler.extend(bulunanisimler)
+    return  isimler
+
+
 def searchInSubDict(name, searchThing):
     isimler = []
     searchThingLength = len(searchThing)
@@ -83,11 +115,12 @@ def searchInSubDict(name, searchThing):
 
 def findInDictionary(twitWord):
     tumBulunanlar = []
-    tumBulunanlar.extend(searchInSubDict('SpecialName', twitWord))
+    tumBulunanlar.extend(searchInSubDict('Person', twitWord))
     tumBulunanlar.extend(searchInSubDict('Organization', twitWord))
     tumBulunanlar.extend(searchInSubDict('Location', twitWord))
     tumBulunanlar.extend(searchInSubDict('Date', twitWord))
     tumBulunanlar.extend(searchInSubDict('Gender', twitWord))
+    tumBulunanlar.extend(checkForRules(twitWord))
     sonuc = yuksekPunalilariGetir(tumBulunanlar)
     return  sonuc
 

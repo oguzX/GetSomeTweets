@@ -1,7 +1,38 @@
 # dict = ['Trakya']
 
 
-dictionary = {'Location':{
+dictionary = {
+    'Organization':{
+        'tag':'Organization',
+        'words':[
+            'disk trakya bölge temsilciliği',
+            'bahçeşehir koleji bilim ve teknoloji lisesi',
+            'millet ittifakı',
+            'denizlispor',
+            'fenerbahçe',
+            'türk kızılay',
+            'osmanlı devleti',
+            'galatasaray',
+            'kadın emek pazarı',
+            'okul aile birliği',
+            'keşan satranç şenliği',
+            'türk ocakları',
+            'otobüsçüler kooperatifi',
+            'kadın kolektifi',
+            'iyi parti',
+            'türkiye gençlik vakfı ',
+            'milli eğitim ',
+            'fetö',
+            'kariyer ve marka etkinliği trakya plus',
+            'trakya tarımsal araştırma enstitüsü',
+            'chp',
+            'hdp',
+            'polis',
+            'halk eğitim',
+            'kalkınma ajansı'
+        ]
+    },
+    'Location':{
         'tag':'Location',
         'words':[
             'edirne',
@@ -9,11 +40,16 @@ dictionary = {'Location':{
             'selimiye camii',
             'bolluca sapağı',
             'aydın',
+            'anadolu',
+            'kahramanmaraş',
+            'e5',
             'mersin',
             'merkez',
+            'türkmenistan',
             'i̇stanbul',
             'ankara',
             'bolu',
+            'bursa',
             'kars',
             'arnavutköy',
             'muğla',
@@ -30,10 +66,12 @@ dictionary = {'Location':{
             'saray',
             'çorlu',
             'kırklareli',
+            'sakarya',
             'avrupa',
             'karaağaç',
             'elazığ',
             'almanya',
+            'van',
             'kktc',
             'yunanistan',
             'yozgat',
@@ -49,35 +87,8 @@ dictionary = {'Location':{
             'tunceli',
             'trakya üniversitesi eğitim fakültesi ',
             'd100',
+            'marmaray',
             'tem istoç'
-        ]
-    },
-    'Organization':{
-        'tag':'Organization',
-        'words':[
-            'edirne belediye başkanlığı',
-            'disk trakya bölge temsilciliği',
-            'bahçeşehir koleji bilim ve teknoloji lisesi',
-            'denizlispor',
-            'fenerbahçe',
-            'osmanlı devleti',
-            'galatasaray',
-            'ak parti edirne il gençlik kolları başkanlığı',
-            'kadın emek pazarı',
-            'okul aile birliği',
-            'keşan satranç şenliği',
-            'türk ocakları',
-            'otobüsçüler kooperatifi',
-            'kadın kolektifi',
-            'iyi parti',
-            'türkiye gençlik vakfı ',
-            'milli eğitim ',
-            'fetö',
-            'kariyer ve marka etkinliği trakya plus',
-            'trakya tarımsal araştırma enstitüsü',
-            'chp',
-            'edirne yağ',
-            'kalkınma ajansı'
         ]
     },
     'Gender':{
@@ -87,13 +98,15 @@ dictionary = {'Location':{
             'erkek'
         ]
     },
-    'SpecialName':{
+    'Person':{
         'tag':'Person',
         'words':[
             'atatürk',
+            'ali',
             'Süleyman Seba',
             'recep tayyip erdoğan',
             'recep gürkan',
+            'fırat çakıroğlu',
             'emre',
             'selahattin demirtaş',
             'enver paşa',
@@ -104,11 +117,13 @@ dictionary = {'Location':{
             'fatih',
             'ekrem canalp',
             'hidayet',
+            'meral akşener',
             'ekrem i̇mamoğlu',
             'nevzat bilgic',
             'olgun birbey şahinbaş',
             'arzu çerkezoğlu',
             'mimar sinan',
+            'ali gürbüz ',
             'i̇smail güner'
 
         ]
@@ -116,19 +131,25 @@ dictionary = {'Location':{
     'Date':{
         'tag':'Date',
         'words':[
-            'aralik',
+            'aralık',
             'ocak',
-            'subat',
+            'şubat',
             'mart',
             'nisan',
-            'mayis',
+            'mayıs',
             'haziran',
             'temmuz',
             'agustos',
-            'eylul',
+            'eylül',
             'ekim',
             'kasim',
-            'çarşamba'
+            'pazartesi',
+            'salı',
+            'çarşamba',
+            'perşembe',
+            'cuma',
+            'cumartesi',
+            'pazar',
 
         ]
     },
@@ -148,14 +169,66 @@ dictionary = {'Location':{
     'Rules':{
         'tag':'rules',
         'words':{
-            'Dr':{
+            'dr':{
                 'get':'after',
-                'length':1
+                'length':2,
+                'type':'Person'
             },
-            'Sn':{
+            'sn':{
                 'get':'after',
-                'length':2
+                'length':2,
+                'type':'Person'
             },
+            'üyesi':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            },
+            'sn.':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            },
+            'sayın':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            },
+            'müdürü':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            },
+            'fuarı':{
+                'get':'before',
+                'length':2,
+                'type':'Location'
+            },
+            'lisesi':{
+                'get':'before',
+                'length':3,
+                'type':'Location'
+            },
+            'ilkokulu':{
+                'get':'before',
+                'length':1,
+                'type':'Location'
+            },
+            'şehit':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            },
+            'er':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            },
+            'gazi':{
+                'get':'after',
+                'length':2,
+                'type':'Person'
+            }
         }
     }
 }
