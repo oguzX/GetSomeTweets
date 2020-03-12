@@ -1,5 +1,6 @@
 from collections import defaultdict
-
+from snowballstemmer import stemmer
+from TurkishStemmer import TurkishStemmer
 
 import dictionary, re,\
     classes.Isim as Isim
@@ -8,12 +9,14 @@ lastType = ''
 lastIndex = ''
 
 
-def printTag(isimler):
+def printTag(isimler, file):
     for isim in isimler:
         point = 0
         char = 'B'
         for word in isim.isim:
-            print('{' + char + '-' + dictionary.dictionary[isim.type]['tag'] + '}' + word)
+            sonuc = '{' + char + '-' + dictionary.dictionary[isim.type]['tag'] + '}' + word
+            print(sonuc)
+            file.write('\n'+sonuc)
             if point == 0:
                 point = 1
                 char = 'I'
@@ -48,12 +51,15 @@ def yuksekPunalilariGetir(bulunanIsimler):
 
 
 def checkForRules(searchThing):
+    # kokbul = stemmer('turkish')
+    # kokbul = TurkishStemmer()
     isimler = []
     searchThingLength = len(searchThing)
     for i in range(0, searchThingLength):
         bulunanisimler = []
         for rules in dictionary.dictionary['Rules']['words'].keys():
-            if searchThing[i].lower() == rules:
+            # if kokbul.stem(searchThing[i].lower()) == rules:
+            if cleanName(searchThing[i]) == rules:
                 rule = dictionary.dictionary['Rules']['words'][rules]
                 indexes = {'start':i,'end':i}
                 if rule['get'] == 'after':
@@ -79,6 +85,8 @@ def checkForRules(searchThing):
 
 
 def searchInSubDict(name, searchThing):
+    # kokbul = stemmer('turkish')
+    # kokbul = TurkishStemmer()
     isimler = []
     searchThingLength = len(searchThing)
     for i in range(0, searchThingLength):
@@ -86,6 +94,7 @@ def searchInSubDict(name, searchThing):
         bulunanIsimler = []
         for j in range(len(dictionary.dictionary[name]['words'])):
             kutuphaneIsmi = dictionary.dictionary[name]['words'][j].split()
+            # if kutuphaneIsmi[0] == kokbul.stem(cleanName(searchThing[i])):
             if kutuphaneIsmi[0] == cleanName(searchThing[i]):
 
                 kelimeBasladi = 0
@@ -125,10 +134,11 @@ def findInDictionary(twitWord):
     return  sonuc
 
 
-def twitArray(twit):
+def twitArray(twit, file):
     twitArr = twit.split(' ')
     global lastType
     lastType = ''
     sonuc = findInDictionary(twitArr)
-    printTag(sonuc)
+    printTag(sonuc, file)
     print('-----')
+    file.write('\n\n\n--------------------------------------\n\n\n')

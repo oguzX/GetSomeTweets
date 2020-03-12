@@ -1,10 +1,10 @@
 
-import tweepy, re, twitterKeys, tag
+import tweepy, re, twitterKeys, tag, datetime
 
 
 RE_EMOJI = re.compile(
     u'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])')
-TWEET_COUNT = 500
+TWEET_COUNT = 2500
 PAGE_COUNT = TWEET_COUNT / 100
 DIV_BY = 4
 
@@ -54,19 +54,26 @@ def cleantext(resultObject):
     newString = ' '.join(re.sub(r'(https:\/\/[a-zA-Z0-9.\/]*\b)', '', newString).split())  # cleans links
     cleanDuplicatedTweets(resultObject, unRepeatedList, newString)
 
+x = datetime.datetime.now()
+f = open('tweets/'+x.strftime("%d%m%y%H%m%S")+'.txt', "a")
+
 counter = 0
 while (counter<TWEET_COUNT):
     public_tweets = api.search(q='edirne', tweet_mode='extended', count=TWEET_COUNT, max_id = LATEST_ID)
     # tag.twitArray(' Sn. Selim Ak ı ziyaret ettik. Misafirperverliklerinden dolayı…')
     # tag.twitArray('Sn Şeref Tütüncü ile birlikte Sn.Pakize Uz, Sn Birsen Özgür ve Sn Soner Polat Gazi m…')
     # tag.twitArray('Eski Edirne Asfaltı Bolluca sapağı sonrası Arnavutköy yönünde yaralanmalı kaza! Ayrıntılar 104.2 Radyo Trafik')
+    # tag.twitArray('Aile tanışmamız ısıfırikiikinbinyirmi sinankrg Uzunköprü Edirne')
     for tweetIndex in range(len(public_tweets)):
         cleantext(public_tweets[tweetIndex])
     for tweet in unRepeatedList:
         print(tweet)
-        tag.twitArray(tweet)
+        f.write(tweet)
+        tag.twitArray(tweet, f)
         counter += 1
 
 print('Tweet Count = '+ str(counter))
+f.write('Tweet Count = '+ str(counter))
+f.close()
 
 
